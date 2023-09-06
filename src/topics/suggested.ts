@@ -97,7 +97,7 @@ export = function (Topics: Topics) {
         topicData = topicData.filter(topic => topic && topic.tid !== tid);
         // The next line calls a function in a module that has not been updated to TS yet
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
-        topicData = await (user.blocks.filter(uid, topicData));
+        topicData = await (user.blocks.filter(uid, topicData)) as Topic[];
         topicData = topicData.slice(start, stop !== -1 ? stop + 1 : undefined)
             .sort((t1, t2) => t2.timestamp - t1.timestamp);
         return topicData;
