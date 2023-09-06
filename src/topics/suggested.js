@@ -65,7 +65,8 @@ module.exports = function (Topics) {
             return lodash_1.default.shuffle(tids.map(Number).filter(_tid => _tid !== tid));
         });
     }
-    function getSuggestedTopics(tid, uid, start, stop, cutoff = 0) {
+    // eslint-disable-next-line max-len
+    Topics.getSuggestedTopics = function (tid, uid, start, stop, cutoff = 0) {
         return __awaiter(this, void 0, void 0, function* () {
             let tids;
             tid = parseInt(tid.toString(), 10);
@@ -85,10 +86,10 @@ module.exports = function (Topics) {
             topicData = topicData.filter(topic => topic && topic.tid !== tid);
             // The next line calls a function in a module that has not been updated to TS yet
             // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
-            topicData = yield user_1.default.blocks.filter(uid, topicData);
+            topicData = yield (user_1.default.blocks.filter(uid, topicData));
             topicData = topicData.slice(start, stop !== -1 ? stop + 1 : undefined)
                 .sort((t1, t2) => t2.timestamp - t1.timestamp);
             return topicData;
         });
-    }
+    };
 };

@@ -17,7 +17,6 @@ interface TopicData {
 }
 
 interface Topics {
-    getSuggestedTopics(tid: number, uid: number, start: number, stop: number, cutoff: number): Promise<Topic[]>;
     getTopicTags(tid: number): Promise<string[]>;
     getSortedSetRevRange(keys: string[], start: number, stop: number): Promise<number[]>;
     // eslint-disable-next-line max-len
@@ -28,6 +27,7 @@ interface Topics {
     getTidsWithSameTags(tid: number, cutoff: number): Promise<number[]>;
     getSearchTids(tid: number, uid: number, cutoff: number): Promise<number[]>;
     getCategoryTids(tid: number, cutoff: number): Promise<number[]>;
+    getSuggestedTopics(tid: number, uid: number, start: number, stop: number, cutoff: number): Promise<Topic[]>;
 }
 
 export = function (Topics: Topics) {
@@ -74,8 +74,8 @@ export = function (Topics: Topics) {
         return _.shuffle(tids.map(Number).filter(_tid => _tid !== tid));
     }
 
-    async function getSuggestedTopics(tid :number, uid :number,
-        start :number, stop :number, cutoff = 0) {
+    // eslint-disable-next-line max-len
+    Topics.getSuggestedTopics = async function (tid :number, uid :number, start :number, stop :number, cutoff = 0): Promise<Topic[]> {
         let tids: number[];
         tid = parseInt(tid.toString(), 10);
         cutoff = cutoff === 0 ? cutoff : (cutoff * 2592000000);
@@ -97,9 +97,9 @@ export = function (Topics: Topics) {
         topicData = topicData.filter(topic => topic && topic.tid !== tid);
         // The next line calls a function in a module that has not been updated to TS yet
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
-        topicData = await (user.blocks.filter(uid, topicData) as Promise<Topic[]>);
+        topicData = await (user.blocks.filter(uid, topicData));
         topicData = topicData.slice(start, stop !== -1 ? stop + 1 : undefined)
             .sort((t1, t2) => t2.timestamp - t1.timestamp);
         return topicData;
-    }
+    };
 }
