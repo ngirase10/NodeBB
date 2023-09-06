@@ -60,3 +60,4 @@ connection.connect = async function (options) {
 };
 
 require('../../promisify')(connection);
+
